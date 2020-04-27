@@ -1,0 +1,5 @@
+@startuml
+
+caller --> callee: deprecatedMethod()
+
+@enduml

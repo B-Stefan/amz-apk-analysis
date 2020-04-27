@@ -1,0 +1,43 @@
+[[amazon:Default]]
+[role=group,includesConstraints="amazon:Android:java.Exception"]
+== amazon
+
+
+=== Concepts
+
+[[amazon:JavaExceptionConcept]]
+[source,cypher,role=concept]
+.All classes that ends with 'Exception' are maked with the label Exception
+----
+MATCH (x:Class)
+
+WHERE x.fqn =~ '.*Exception'
+
+SET x:Exception
+
+RETURN x
+----
+
+
+
+=== Constrains
+
+
+==== java.Exception
+
+[[amazon:Android:java.Exception]]
+.Avoid direct usage of java.lang.Exception
+[source,cypher,role=constraint,requiresConcepts="amazon:JavaExceptionConcept",severity=warning]
+----
+MATCH (sdk:Class {fqn:'java.lang.Exception'})<-[:DEPENDS_ON]-(from:Android:Activity)
+
+match
+  (e:Exception {fqn: ""java.lang.Exception""})-[:DECLARES]->(c:Constructor),
+  (a:Package {name:"amazon"})-[:CONTAINS*..]->(t:Type)-[:DECLARES]->(m:Method)-[i:INVOKES]->(c)
+where
+  not (m:Constructor)
+return
+  e.fqn as exception, count(t)
+order by
+  exception,  type
+----

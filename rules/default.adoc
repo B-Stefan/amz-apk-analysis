@@ -1,0 +1,11 @@
+= Coding Rules
+
+[[default]]
+[role=group,includesGroups="amazon:Default"]
+== Default Rules
+
+The following rule groups are executed by default:
+
+- <<amazon:Default>>
+
+include::amazon.adoc[]
